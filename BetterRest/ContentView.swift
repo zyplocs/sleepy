@@ -42,6 +42,11 @@ struct ContentView: View {
                 Button("Calculate", action: calculateBedtime)
                     .buttonStyle(GlassButtonStyle())
             }
+            .alert(alertTitle, isPresented: $showingAlert) {
+                Button("OK") { }
+            } message: {
+                Text(alertMessage)
+            }
         }
     }
     
@@ -59,9 +64,15 @@ struct ContentView: View {
                                                   coffee: Double(coffeeAmount))
             
             let sleepTime = wakeUp - prediction.actualSleep
+            
+            alertMessage = "Your ideal bedtime is…"
+            alertMessage = sleepTime.formatted(date: .omitted, time: .shortened)
         } catch {
-            // Something went wrong!!
+            alertTitle = "Error"
+            alertMessage = "Sorry, there was a problem calculating your bedtime."
         }
+        
+        showingAlert = true
     }
 }
 
